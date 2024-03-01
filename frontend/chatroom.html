@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat Room</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="mes">
+      <div class="mmes">
+        <div id="chatbox"></div>
+        <div id="usersList"></div>
+      </div>
+      <!-- Placeholder for the list of users -->
+      <div class="mess">
+        <input type="text" id="messageInput" placeholder="Type your message" />
+        <button onclick="sendMessage()">Send</button>
+      </div>
+      <button id="logout" onclick="logout()">Logout</button>
+    </div>
+    <script>
+      var username = sessionStorage.getItem("username");
+      if (!username) {
+        window.location.href = "index.html";
+      }
+
+      var ws = new WebSocket("ws://localhost:8080");
+
+      ws.onopen = function () {
+        console.log("Connected to the server.");
+        ws.send(JSON.stringify({ type: "join", username: username }));
+      };
+
+      ws.onmessage = function (event) {
+        var data = JSON.parse(event.data);
+        if (data.type === "chatHistory") {
+          displayChatHistory(data.history);
+        } else if (data.type === "users") {
+          updateUsersList(data.users);
+        } else {
+          displayMessage(data.sender, data.text); // Display the message
+        }
+      };
+
+      function sendMessage() {
+        var message = document.getElementById("messageInput").value;
+
+        if (message === "") {
+          alert("Please enter a message!");
+          return;
+        }
+
+        var messageObj = {
+          type: "message",
+          sender: username,
+          text: message,
+        };
+
+        ws.send(JSON.stringify(messageObj));
+
+        document.getElementById("messageInput").value = "";
+      }
+
+      function displayMessage(sender, message) {
+        if (sender && message) {
+          // Check if sender and message are defined
+          var chatbox = document.getElementById("chatbox");
+          var messageElement = document.createElement("p");
+          messageElement.textContent = sender + ": " + message;
+          chatbox.appendChild(messageElement);
+          chatbox.scrollTop = chatbox.scrollHeight; // Scroll to bottom
+        } else {
+          console.error(
+            "Received empty or malformed message:",
+            sender,
+            message
+          );
+        }
+      }
+
+      function displayChatHistory(history) {
+        var chatbox = document.getElementById("chatbox");
+        chatbox.innerHTML = ""; // Clear previous messages
+        var messages = history.split("\n");
+        messages.forEach((msg) => {
+          var messageElement = document.createElement("p");
+          messageElement.textContent = msg;
+          chatbox.appendChild(messageElement);
+        });
+        chatbox.scrollTop = chatbox.scrollHeight; // Scroll to bottom after loading history
+      }
+
+      function updateUsersList(users) {
+        var usersList = document.getElementById("usersList");
+        usersList.innerHTML = "";
+        users.forEach(function (user) {
+          var userElement = document.createElement("li");
+          userElement.textContent = user;
+          usersList.appendChild(userElement);
+        });
+      }
+
+      function logout() {
+        sessionStorage.removeItem("username");
+        ws.close();
+        window.location.href = "index.html";
+      }
+
+      document
+        .getElementById("messageInput")
+        .addEventListener("keyup", function (event) {
+          if (event.keyCode === 13) {
+            event.preventDefault();
+            sendMessage();
+          }
+        });
+
+      // Load chat history when the page loads
+      window.onload = function () {
+        ws.send(JSON.stringify({ type: "getChatHistory" }));
+      };
+    </script>
+  </body>
+</html>

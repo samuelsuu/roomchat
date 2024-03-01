@@ -1,0 +1,91 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: 0;
+}
+
+li {
+  list-style: none;
+}
+.home {
+  background: linear-gradient(rgb(11, 34, 61), rgb(2, 108, 191));
+}
+
+.name {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  line-height: 70px;
+  color: pink;
+}
+
+.name input {
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  margin: 15px;
+  padding: 10px;
+  background: transparent;
+  color: pink;
+}
+
+.name button {
+  padding: 10px;
+  border-radius: 15px;
+  color: rgb(97, 27, 9);
+  background: pink;
+}
+
+/* chatroom */
+
+#chatbox {
+  background: white;
+  width: 400px;
+  height: 80vh;
+  border: 1px solid #ccc;
+  overflow-y: scroll;
+}
+#chatbox p {
+  color: rgb(13, 13, 92);
+  font-weight: 900;
+  margin: 5px;
+}
+mmes {
+  display: flex;
+  justify-content: space-between;
+}
+
+.mes {
+  background: linear-gradient(rgb(11, 34, 61), rgb(2, 108, 191));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 20px 0;
+}
+.mess {
+  display: flex;
+  gap: 1rem;
+  margin: 15px 0;
+}
+
+.mess input,
+button {
+  padding: 10px;
+  border-radius: 10px;
+}
+.mess input {
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+
+#usersList {
+}
+
+#logout{
+  background: rgba(189, 58, 58, 0.6);
+}

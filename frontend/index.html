@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enter Your Name</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="./node_modules/aos/dist/aos.css">
+  </head>
+  <body>
+    <div class="home">
+      <div class="name" data-aos="fade-up-left"
+      data-aos-easing="linear"
+      data-aos-duration="1500">
+        <h2>Enter Your Name</h2>
+        <input type="text" id="nameInput" placeholder="Enter your name" />
+        <button onclick="enterChatRoom()">Enter Chat Room</button>
+      </div>
+    </div>
+
+    <script src="./node_modules/aos/dist/aos.js"></script>
+    <script>
+
+      AOS.init();
+
+      function enterChatRoom() {
+        var name = document.getElementById("nameInput").value;
+
+        if (name === "") {
+          alert("Please enter your name!");
+          return;
+        }
+
+        sessionStorage.setItem("username", name);
+        window.location.href = "chatroom.html";
+      }
+    </script>
+  </body>
+</html>
