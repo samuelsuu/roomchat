@@ -25,7 +25,7 @@
         window.location.href = "index.html";
       }
 
-      var ws = new WebSocket("https://roomchat-1.onrender.com");
+      var ws = new WebSocket("ws://localhost:8080");
 
       ws.onopen = function () {
         console.log("Connected to the server.");
